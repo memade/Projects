@@ -7,5 +7,5 @@ script_executable = "python3"
 
 
 default_args = {
-    is_debug=true
+    
 }

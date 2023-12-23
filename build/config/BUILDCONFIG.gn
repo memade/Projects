@@ -1,5 +1,31 @@
 declare_args() {
-  is_clang = true
+  toolset = "gcc"
 }
 
-set_default_toolchain("//build/toolchain:clang")
+if (target_os == "") {
+  target_os = host_os
+}
+if (target_cpu == "") {
+  target_cpu = host_cpu
+}
+if (current_os == "") {
+  current_os = target_os
+}
+if (current_cpu == "") {
+  current_cpu = target_cpu
+}
+
+is_win = current_os == "win" || current_os == "winuwp"
+is_fuchsia = current_os == "fuchsia"
+is_ios = current_os == "ios"
+is_mac = current_os == "mac"
+is_apple = is_ios || is_mac
+is_posix = !is_win && !is_fuchsia
+
+is_clang = toolset == "clang"
+is_gcc = toolset == "gcc"
+is_msvc = toolset == "msvc"
+
+set_default_toolchain("//build/toolchain:$toolset")
+
+
