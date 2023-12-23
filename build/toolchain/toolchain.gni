@@ -1,0 +1,42 @@
+template("toolchain_t") {
+  cc = invoker.cc
+  cxx = invoker.cxx
+
+  #ar = invoker.ar
+  #as = invoker.as
+  #ld = invoker.ld
+
+  toolchain(target_name) {
+    tool("cc") {
+      command = "$cc {{defines}} {{include_dirs}} {{cflags}} {{cflags_c}} -c {{source}} -o {{output}}"
+      description = "CC {{output}}"
+      outputs = [ "{{source_out_dir}}/{{source_name_part}}.o" ]
+    }
+
+    tool("cxx") {
+      command = "$cxx {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} -c {{source}} -o {{output}}"
+      description = "CXX {{output}}"
+      outputs =
+          [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
+    }
+    tool("asm") {
+    }
+    tool("alink") {
+    }
+    tool("solink") {
+    }
+    tool("solink_module") {
+    }
+    tool("link") {
+        command="$ld"
+    }
+    tool("stamp") {
+        command="cmd /c type nul > \"{{output}}\""
+        description="STAMP {{output}}"
+    }
+    tool("copy") {
+        command="cp -afd {{source}} {{output}}"
+        description="COPY {{source}} {{output}}"
+    }
+  }
+}

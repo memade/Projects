@@ -1,0 +1,9 @@
+import("//build/toolchain/toolchain.gni")
+
+toolchain_t("clang"){
+ cc="clang"
+ cxx="clang++"
+ #ar="llvm-ar"
+ #as="llvm-as"
+ #ld=cc
+}

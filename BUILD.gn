@@ -1,0 +1,3 @@
+group("build_all"){
+    deps=["//tests:test"]
+}

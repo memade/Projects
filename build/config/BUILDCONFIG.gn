@@ -1,4 +1,5 @@
 declare_args() {
-
-
+  is_clang = true
 }
+
+set_default_toolchain("//build/toolchain:clang")
