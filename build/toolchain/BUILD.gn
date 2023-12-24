@@ -1,17 +1,23 @@
 import("//build/toolchain/toolchain.gni")
 
-toolchain_t("clang"){
- cc="clang"
- cxx="clang++"
- ar="llvm-ar"
- as="llvm-as"
- ld=cxx
+toolchain_t("clang") {
+  cc = "clang"
+  cxx = "clang++"
+  ar = "llvm-ar"
+  as = "llvm-as"
+  if (clang_version != "") {
+    cc += "-$clang_version"
+    cxx += "-$clang_version"
+    ar += "-$clang_version"
+    as += "-$clang_version"
+  }
+  ld = cxx
 }
 
-toolchain_t("gcc"){
- cc="gcc"
- cxx="g++"
- ar="ar"
- as="as"
- ld=cxx
+toolchain_t("gcc") {
+  cc = "gcc"
+  cxx = "g++"
+  ar = "ar"
+  as = "as"
+  ld = cxx
 }

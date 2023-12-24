@@ -1,0 +1,52 @@
+config("default") {
+  defines = []
+  if (is_debug) {
+    defines += [
+      "DEBUG",
+      "_DEBUG",
+    ]
+  } else {
+    defines += [ "NDEBUG" ]
+  }
+  if (is_win) {
+    defines += [ "WIN32" ]
+  }
+}
+
+config("compiler_default") {
+  cflags = []
+  if (is_posix) {
+    cflags += [
+      "-fPIC",
+      "-pthread",
+    ]
+  }
+}
+config("c_std") {
+  cflags_c = [ "-std=$c_std" ]
+  if (is_win && is_msvc) {  #vs_ver>=150
+    cflags_c = [ "/std:$c_std" ]
+  }
+  if (is_build_log) {
+    cflags_c += [ "-v" ]
+  }
+  if (is_mac) {
+    cflags_objc = cflags_c
+  }
+}
+
+config("cc_std") {
+  cflags_cc = [ "-std=$cc_std" ]
+  if (is_win && is_msvc) {
+    cflags_cc = [ "/std:$cc_std" ]
+  }
+  if (is_build_log) {
+    cflags_cc += [ "-v" ]
+  }
+  if (is_use_clang_libcxx) {
+    cflags_cc += [ "-stdlib=libc++" ]
+  }
+  if (is_mac) {
+    cflags_objcc = cflags_cc
+  }
+}
