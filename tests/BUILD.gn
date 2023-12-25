@@ -1,3 +1,7 @@
-executable("test"){
-    sources=["test.cc"]
+#executable("test") {
+#    sources=["test.cc"]
+#}
+
+executable("rust_test"){
+    sources=["main.rs"]
 }

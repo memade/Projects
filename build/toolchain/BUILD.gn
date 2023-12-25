@@ -1,11 +1,11 @@
 import("//build/toolchain/toolchain.gni")
 
-toolchain_t("clang") {
+gcc_toolchain("clang") {
   cc = "clang"
   cxx = "clang++"
   ar = "llvm-ar"
   as = "llvm-as"
-  if (clang_version != "") {
+  if (!is_win && clang_version != "") {
     cc += "-$clang_version"
     cxx += "-$clang_version"
     ar += "-$clang_version"
@@ -14,10 +14,14 @@ toolchain_t("clang") {
   ld = cxx
 }
 
-toolchain_t("gcc") {
+gcc_toolchain("gcc") {
   cc = "gcc"
   cxx = "g++"
   ar = "ar"
   as = "as"
   ld = cxx
+}
+
+rust_toolchain("rust") {
+  rc = "rustc"
 }

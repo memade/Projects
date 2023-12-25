@@ -1,3 +1,6 @@
-group("build_all"){
-    deps=["//tests:test"]
+group("default") {
+  deps = [
+    "//tests:rust_test",
+    #"//tests:test",
+  ]
 }

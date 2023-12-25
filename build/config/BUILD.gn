@@ -1,4 +1,4 @@
-config("default") {
+config("c_cc_defines") {
   defines = []
   if (is_debug) {
     defines += [
@@ -13,7 +13,7 @@ config("default") {
   }
 }
 
-config("compiler_default") {
+config("c_cc_defaults") {
   cflags = []
   if (is_posix) {
     cflags += [
@@ -49,4 +49,8 @@ config("cc_std") {
   if (is_mac) {
     cflags_objcc = cflags_cc
   }
+}
+
+config("rust_defaults") {
+  rustflags = [ "-Cdebuginfo=2" ]
 }

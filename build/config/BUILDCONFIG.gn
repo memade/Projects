@@ -8,9 +8,10 @@ declare_args() {
   #['c++98','c++03','c++11','c++14','c++17','c++20','c++23',]
   cc_std = "c++2a"
 
-  toolset = "clang"
-  clang_version="18"
-  clang_use_libcxx=false
+  #['clang','msvc','gcc','rust',]
+  toolset = "rust"
+  clang_version = "18"
+  clang_use_libcxx = false
 }
 
 if (target_os == "") {
@@ -39,15 +40,23 @@ is_clang = toolset == "clang" || toolset == "clang18"
 is_use_clang_libcxx = clang_use_libcxx == true
 is_gcc = toolset == "gcc"
 is_msvc = toolset == "msvc"
+is_rust = toolset == "rust"
 
 set_default_toolchain("//build/toolchain:$toolset")
 
-_default_configs = [
-  "//build/config:default",
-  "//build/config:c_std",
-  "//build/config:cc_std",
-  "//build/config:compiler_default",
-]
+_default_configs = []
+
+if (is_rust) {
+  _default_configs += [ "//build/config:rust_defaults" ]
+} else {
+  _default_configs += [
+    "//build/config:c_cc_defines",
+    "//build/config:c_std",
+    "//build/config:cc_std",
+    "//build/config:c_cc_defaults",
+  ]
+}
+
 set_defaults("executable") {
   configs = _default_configs
 }

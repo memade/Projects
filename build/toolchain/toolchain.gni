@@ -1,10 +1,10 @@
-template("toolchain_t") {
-  assert(defined(invoker.cc), "toolchain_t must spectify a 'cc' value.")
-  assert(defined(invoker.cxx), "toolchain_t must spectify a 'cxx' value.")
-  assert(defined(invoker.ar), "toolchain_t must spectify a 'ar' value.")
-  assert(defined(invoker.as), "toolchain_t must spectify a 'as' value.")
-  assert(defined(invoker.ld), "toolchain_t must spectify a 'ld' value.")
-  
+template("gcc_toolchain") {
+  assert(defined(invoker.cc), "gcc_toolchain must spectify a 'cc' value.")
+  assert(defined(invoker.cxx), "gcc_toolchain must spectify a 'cxx' value.")
+  assert(defined(invoker.ar), "gcc_toolchain must spectify a 'ar' value.")
+  assert(defined(invoker.as), "gcc_toolchain must spectify a 'as' value.")
+  assert(defined(invoker.ld), "gcc_toolchain must spectify a 'ld' value.")
+
   toolchain(target_name) {
     cc = invoker.cc
     cxx = invoker.cxx
@@ -139,3 +139,52 @@ template("toolchain_t") {
     }
   }
 }
+
+template("rust_toolchain") {
+  assert(defined(invoker.rc), "rust_toolchain must spectify a 'rc' value.")
+  #assert(defined(invoker.cc), "rust_toolchain must spectify a 'cc' value.")
+  toolchain(target_name) {
+    rc = invoker.rc
+
+    tool("rust_bin") {
+      depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      outfile = "{{target_out_dir}}/{{crate_name}}"
+      command = "$rc --crate-name {{crate_name}} {{source}} --crate-type {{crate_type}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      description = "RUST $outfile"
+      outputs = [ outfile ]
+    }
+    tool("rust_staticlib") {
+      depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      outfile = "{{target_out_dir}}/{{crate_name}}.a"
+      command = "$rc --crate-name {{crate_name}} {{source}} --crate-type {{crate_type}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      description = "RUST $outfile"
+      outputs = [ outfile ]
+    }
+    tool("rust_rlib") {
+      depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      outfile = "{{target_out_dir}}/lib{{crate_name}}.rlib"
+      command = "$rc --crate-name {{crate_name}} {{source}} --crate-type {{crate_type}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      description = "RUST $outfile"
+      outputs = [ outfile ]
+    }
+    tool("rust_cdylib") {
+      depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
+      command = "$rc --crate-name {{crate_name}} {{source}} --crate-type {{crate_type}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      description = "RUST $outfile"
+      outputs = [ outfile ]
+    }
+    tool("stamp") {
+      command = "touch {{output}}"
+      if (is_win) {
+        command = "cmd /c type nul > \"{{output}}\""
+      }
+      description = "STAMP {{output}}"
+    }
+    tool("copy") {
+      command = "cp -af {{source}} {{output}}"
+      description = "COPY {{source}} {{output}}"
+    }
+  }
+}
+
