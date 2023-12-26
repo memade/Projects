@@ -1,7 +1,32 @@
-#executable("test") {
-#    sources=["test.cc"]
-#}
-
-executable("rust_test"){
-    sources=["main.rs"]
+if (is_rust) {
+  rust_library("dylib") {
+    crate_type = "cdylib"
+    configs += [ "//build/config:rust_shared_library_defaults" ]
+    sources = [ "rust/dylib.rs" ]
+  }
+  rust_library("bar") {
+    #crate_root = "rust/bar.rs"
+    sources = [ "rust/bar.rs" ]
+  }
+  rust_library("foo") {
+    sources = [ "rust/lib.rs" ]
+    deps = [ ":bar" ]
+  }
+  executable("rust_test") {
+    sources = [ "rust/main.rs" ]
+    deps = [
+      ":dylib",
+      ":foo",
+    ]
+    aliased_deps = {
+      baz = ":foo"
+    }
+  }
+} else {
+  executable("test") {
+    sources = [ "test.cc" ]
+  }
+  executable("test_conroutine") {
+    sources = [ "conroutine.cc" ]
+  }
 }

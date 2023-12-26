@@ -43,9 +43,9 @@ config("cc_std") {
   if (is_build_log) {
     cflags_cc += [ "-v" ]
   }
-  if (is_use_clang_libcxx) {
-    cflags_cc += [ "-stdlib=libc++" ]
-  }
+  #if (is_use_clang_libcxx) {
+  #  cflags_cc += [ "-stdlib=libc++" ]
+  #}
   if (is_mac) {
     cflags_objcc = cflags_cc
   }
@@ -53,4 +53,7 @@ config("cc_std") {
 
 config("rust_defaults") {
   rustflags = [ "-Cdebuginfo=2" ]
+}
+config("rust_shared_library_defaults") {
+  rustflags = [ "-Clink-args=-shared" ]
 }

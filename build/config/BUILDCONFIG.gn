@@ -9,9 +9,8 @@ declare_args() {
   cc_std = "c++2a"
 
   #['clang','msvc','gcc','rust',]
-  toolset = "rust"
+  toolset = "gcc"
   clang_version = "18"
-  clang_use_libcxx = false
 }
 
 if (target_os == "") {
@@ -37,28 +36,25 @@ is_apple = is_ios || is_mac
 is_posix = !is_win && !is_fuchsia
 
 is_clang = toolset == "clang" || toolset == "clang18"
-is_use_clang_libcxx = clang_use_libcxx == true
 is_gcc = toolset == "gcc"
 is_msvc = toolset == "msvc"
 is_rust = toolset == "rust"
 
 set_default_toolchain("//build/toolchain:$toolset")
 
-_default_configs = []
-
-if (is_rust) {
-  _default_configs += [ "//build/config:rust_defaults" ]
-} else {
-  _default_configs += [
-    "//build/config:c_cc_defines",
-    "//build/config:c_std",
-    "//build/config:cc_std",
-    "//build/config:c_cc_defaults",
-  ]
-}
+_default_configs = [
+  "//build/config:c_cc_defines",
+  "//build/config:c_std",
+  "//build/config:cc_std",
+  "//build/config:c_cc_defaults",
+]
 
 set_defaults("executable") {
   configs = _default_configs
+  if (is_rust) {
+    _default_configs = []
+    _default_configs = [ "//build/config:rust_defaults" ]
+  }
 }
 set_defaults("static_library") {
   configs = _default_configs
@@ -67,5 +63,8 @@ set_defaults("shared_library") {
   configs = _default_configs
 }
 set_defaults("source_set") {
+  configs = _default_configs
+}
+set_defaults("rust_library") {
   configs = _default_configs
 }

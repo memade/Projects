@@ -5,7 +5,5 @@ buildconfig = "//build/config/BUILDCONFIG.gn"
 # for python3.exe and python3.bat.
 script_executable = "python3"
 
-
 default_args = {
-    
 }
