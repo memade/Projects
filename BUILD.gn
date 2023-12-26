@@ -1,7 +1,7 @@
 group("default") {
   deps = [
-    #"//tests:rust_test",
-    "//tests:test",
-    "//tests:test_conroutine",
+    "//tests:rust_test",
+    #"//tests:test",
+    #"//tests:test_conroutine",
   ]
 }

@@ -9,7 +9,7 @@ declare_args() {
   cc_std = "c++2a"
 
   #['clang','msvc','gcc','rust',]
-  toolset = "gcc"
+  toolset = "rust"
   clang_version = "18"
 }
 
