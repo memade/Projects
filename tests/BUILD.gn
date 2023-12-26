@@ -24,6 +24,7 @@ if (is_rust) {
   #}
   executable("tcp_server") {
     sources = [ "rust/tcp_server.rs" ]
+    #deps = ["//threadpool:threadpool"]
   }
 } else {
   executable("test") {
