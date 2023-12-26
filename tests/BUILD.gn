@@ -1,26 +1,29 @@
 if (is_rust) {
-  rust_library("dylib") {
-    crate_type = "cdylib"
-    configs += [ "//build/config:rust_shared_library_defaults" ]
-    sources = [ "rust/dylib.rs" ]
-  }
-  rust_library("bar") {
-    #crate_root = "rust/bar.rs"
-    sources = [ "rust/bar.rs" ]
-  }
-  rust_library("foo") {
-    sources = [ "rust/lib.rs" ]
-    deps = [ ":bar" ]
-  }
-  executable("rust_test") {
-    sources = [ "rust/main.rs" ]
-    deps = [
-      ":dylib",
-      ":foo",
-    ]
-    aliased_deps = {
-      baz = ":foo"
-    }
+  #  rust_library("dylib") {
+  #   crate_type = "cdylib"
+  #  configs += [ "//build/config:rust_shared_library_defaults" ]
+  # sources = [ "rust/dylib.rs" ]
+  #}
+  #rust_library("bar") {
+  #crate_root = "rust/bar.rs"
+  # sources = [ "rust/bar.rs" ]
+  #}
+  #rust_library("foo") {
+  # sources = [ "rust/lib.rs" ]
+  #deps = [ ":bar" ]
+  #}
+  #executable("rust_test") {
+  # sources = [ "rust/main.rs" ]
+  #deps = [
+  # ":dylib",
+  #":foo",
+  #]
+  #aliased_deps = {
+  # baz = ":foo"
+  #}
+  #}
+  executable("tcp_server") {
+    sources = [ "rust/tcp_server.rs" ]
   }
 } else {
   executable("test") {
